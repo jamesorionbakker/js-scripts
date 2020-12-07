@@ -21,5 +21,5 @@ function getDivisers(a, b){
   return gcdArr;
 }
 
-let result = getDivisers(4093012,68602824)
+let result = getDivisers(144,96)
 console.log(result);
