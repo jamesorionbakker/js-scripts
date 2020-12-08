@@ -14,7 +14,7 @@ function roman(num) {
     IV: 4,
     I: 1
   }
-  let i;
+  let iq;
   let roman = '';
 
   for (i in romVals) {
