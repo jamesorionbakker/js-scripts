@@ -23,28 +23,29 @@ class BinarySearchTree {
             this.root = newNode;
             return this.root;
         }
-        let current = this.root;
-        while (current) {
-            if (current.value === value) {
-                return undefined;
-            }
-            if (current.value > value) {
-                if (current.left === null) {
-                    newNode.parent = current;
-                    current.left = newNode;
-                    return this.root;
-                }
-                current = current.left;
 
-            } else {
-                if (current.right === null) {
-                    newNode.parent = current;
-                    current.right = newNode;
-                    return this.root;
-                }
-                current = current.right;
-            }
-        }
+        // let current = this.root;
+        // while (current) {
+        //     if (current.value === value) {
+        //         return undefined;
+        //     }
+        //     if (current.value > value) {
+        //         if (current.left === null) {
+        //             newNode.parent = current;
+        //             current.left = newNode;
+        //             return this.root;
+        //         }
+        //         current = current.left;
+
+        //     } else {
+        //         if (current.right === null) {
+        //             newNode.parent = current;
+        //             current.right = newNode;
+        //             return this.root;
+        //         }
+        //         current = current.right;
+        //     }
+        // }
     }
     
     find(value) {
@@ -109,7 +110,7 @@ class BinarySearchTree {
         return response;
     }
     
-    delete(value) {
+    delete(value) {  // this is NlogN should be logN
         let node;
         if (value == undefined) {return};
         

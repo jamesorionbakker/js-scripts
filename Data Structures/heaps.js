@@ -1,5 +1,7 @@
+'use strict'
+
 class Node {
-    constructor(){
+    constructor() {
         this.value = null;
         this.left = null;
         this.right = null;
@@ -10,90 +12,64 @@ class MinHeap {
     constructor() {
         this.heap = [null]
     }
-
-    getMin() {
+    readMin() {
         return this.heap[1]
     }
-
-    insert(val) {
-        this.heap.push(val);
-        if(this.heap.length > 1){
-            let current = this.heap.length -1
-
-            while(current > 1 && this.heap[Math.floor(current/2)] > this.heap[current]){
-                let small = this.heap[Math.floor(current/2)];
-                this.heap[Math.floor(current/2)] = this.heap[current];
-                this.heap[current] = small;
-                current = Math.floor(current/ 2);
-            }
+    queue(val) {
+        let heap = this.heap;
+        heap.push(val);
+        let current = heap.length - 1;
+        let parent = Math.floor(current / 2);
+        while (heap[parent] && heap[parent] > heap[current]) {
+            [heap[current], heap[parent]] = [heap[parent], heap[current]];
+            current = parent;
+            parent = Math.floor(current / 2);
         }
-        return this.heap;
+        return heap;    
     }
-    dequeue(){
-        if(this.heap.length <= 1){
-            return;
-        }
-        if(this.heap.length === 2){
-            return this.heap.splice(1,1);
-        }
-        if(this.heap.length > 2){
-            let min = this.heap[1]; //save min for return at end of block
-            this.heap[1] = this.heap.pop();
-            
-            if(this.heap.length === 3){
-                if(this.heap[1] > this.heap[2]){
-                    [this.heap[1], this.heap[2]] = [this.heap[2], this.heap[1]];
-                }
-                return min;
-            }
+    dequeue() {
+        let heap = this.heap;
+        [heap[1], heap[heap.length -1]] = [heap[heap.length -1], heap[1]];
+        let response = heap.pop();  
 
-            let current = 1
-            let leftChild = current * 2;
-            let rightChild = current * 2 + 1;
-            console.log(this.heap[rightChild]);
-            while(this.heap[leftChild] !== undefined && this.heap[rightChild] !== undefined && (this.heap[current] > this.heap[leftChild] || this.heap[current] > this.heap[rightChild])){
-                if(this.heap[leftChild] < this.heap[rightChild]){
-                    [this.heap[current], this.heap[leftChild]] = [this.heap[leftChild], this.heap[current]];
-                    current = leftChild;
-                }
-                else {
-                    [this.heap[current], this.heap[rightChild]] = [this.heap[rightChild], this.heap[current]];
-                    current = rightChild;
-                }
-                leftChild = current * 2;
-                rightChild = current * 2 + 1;
-            }
-            if(this.heap[rightChild] === undefined && this.heap[current] > this.heap[leftChild]){
-                [this.heap[current], this.heap[leftChild]] = [this.heap[leftChild], this.heap[current]];
-            }
-            return min;
-        } 
+        let current = 1;
+        let left = current * 2;
+        let right = left + 1;
+
+        while (heap[current] > heap[left] || heap[current] > heap[right]) {
+            let smallerChild = (heap[left] > heap[right]) ? right : left;
+            [heap[smallerChild], heap[current]] = [heap[current], heap[smallerChild]];
+            current = smallerChild;
+            left = current * 2;
+            right = left + 1;
+        }
+        return response;
     }
-    buildNodeTree(index=1) {
-        if(index < this.heap.length){
+    buildNodeTree(index = 1) {
+        if (index < this.heap.length) {
             let currentNode = new Node;
             currentNode.value = this.heap[index];
             let leftChild = index * 2;
             let rightChild = (index * 2) + 1;
-            if(leftChild < this.heap.length){
+            if (leftChild < this.heap.length) {
                 currentNode.left = this.buildNodeTree(leftChild);
             }
-            if(rightChild < this.heap.length){
+            if (rightChild < this.heap.length) {
                 currentNode.right = this.buildNodeTree(rightChild);
             }
             return currentNode;
         }
     }
-    buildHtmlList(index=1) {
-        if(index < this.heap.length){
+    buildHtmlList(index = 1) {
+        if (index < this.heap.length) {
             let output = '<li>' + this.heap[index] + '</li>'
             let leftChild = index * 2;
             let rightChild = (index * 2) + 1;
             output += '<ul>';
-            if(rightChild < this.heap.length){
+            if (rightChild < this.heap.length) {
                 output += this.buildHtmlList(rightChild);
             }
-            if(leftChild < this.heap.length){
+            if (leftChild < this.heap.length) {
                 output += this.buildHtmlList(leftChild);
             }
             output += '</ul>';
@@ -104,14 +80,13 @@ class MinHeap {
 let heap = new MinHeap;
 
 let num;
-for(let i=0; i<31; i++){
+for (let i = 0; i < 31; i++) {
     num = Math.floor(Math.random() * 100);
-    heap.insert(num);
+    heap.queue(num);
 }
-
 console.log(heap.heap)
 
-function print(){
+function print() {
     document.body.innerHTML = `<ul>${heap.buildHtmlList()}</ul>`
 }
 print();
